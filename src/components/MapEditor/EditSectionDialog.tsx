@@ -29,19 +29,11 @@ export const EditSectionDialog = ({ open, onOpenChange, sectionId }: EditSection
   
   const [label, setLabel] = useState("");
   const [color, setColor] = useState(PRESET_COLORS[0]);
-  const [width, setWidth] = useState(300);
-  const [height, setHeight] = useState(200);
-  const [rotation, setRotation] = useState(0);
-  const [curve, setCurve] = useState(0);
 
   useEffect(() => {
     if (section) {
       setLabel(section.label);
       setColor(section.color);
-      setWidth(section.width || 300);
-      setHeight(section.height || 200);
-      setRotation(section.rotation || 0);
-      setCurve(section.curve || 0);
     }
   }, [section]);
 
@@ -51,14 +43,7 @@ export const EditSectionDialog = ({ open, onOpenChange, sectionId }: EditSection
       return;
     }
 
-    updateSection(sectionId, { 
-      label: label.trim(), 
-      color,
-      width,
-      height,
-      rotation,
-      curve
-    });
+    updateSection(sectionId, { label: label.trim(), color });
     toast.success("Sección actualizada");
     onOpenChange(false);
   };
@@ -101,56 +86,6 @@ export const EditSectionDialog = ({ open, onOpenChange, sectionId }: EditSection
                 />
               ))}
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="width">Ancho</Label>
-              <Input
-                id="width"
-                type="number"
-                min="100"
-                max="800"
-                value={width}
-                onChange={(e) => setWidth(Number(e.target.value))}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="height">Alto</Label>
-              <Input
-                id="height"
-                type="number"
-                min="100"
-                max="600"
-                value={height}
-                onChange={(e) => setHeight(Number(e.target.value))}
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="rotation">Rotación: {rotation}°</Label>
-            <Input
-              id="rotation"
-              type="range"
-              min="0"
-              max="360"
-              value={rotation}
-              onChange={(e) => setRotation(Number(e.target.value))}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="curve">Curvatura: {curve}%</Label>
-            <Input
-              id="curve"
-              type="range"
-              min="0"
-              max="100"
-              value={curve}
-              onChange={(e) => setCurve(Number(e.target.value))}
-            />
           </div>
         </div>
 

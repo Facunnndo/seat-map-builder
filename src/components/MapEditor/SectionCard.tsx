@@ -51,11 +51,6 @@ export const SectionCard = ({ section }: SectionCardProps) => {
 
   const isSelected = selectedSectionId === section.id;
 
-  const sectionWidth = section.width || 300;
-  const sectionHeight = section.height || 200;
-  const sectionRotation = section.rotation || 0;
-  const sectionCurve = section.curve || 0;
-
   return (
     <div
       ref={cardRef}
@@ -65,10 +60,6 @@ export const SectionCard = ({ section }: SectionCardProps) => {
       style={{
         left: section.position.x,
         top: section.position.y,
-        width: `${sectionWidth}px`,
-        minHeight: `${sectionHeight}px`,
-        transform: `rotate(${sectionRotation}deg)`,
-        borderRadius: sectionCurve > 0 ? `${sectionCurve}%` : '8px',
         cursor: isDragging ? "grabbing" : "grab",
       }}
       onMouseDown={handleMouseDown}
