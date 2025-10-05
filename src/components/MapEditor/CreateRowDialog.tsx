@@ -47,12 +47,12 @@ export const CreateRowDialog = ({ open, onOpenChange, sectionId }: CreateRowDial
       const rowLabelFinal = rowCount > 1 
         ? `${rowLabel.trim()} ${r + 1}` 
         : rowLabel.trim();
-      
-      const seatPrefixFinal = seatPrefix.trim() || rowLabelFinal;
 
       const seats = Array.from({ length: seatCount }, (_, i) => ({
         id: crypto.randomUUID(),
-        label: `${seatPrefixFinal}${i + 1}`,
+        label: seatPrefix.trim() 
+          ? `${seatPrefix.trim()}${i + 1}` 
+          : `${rowLabelFinal}${i + 1}`,
         x: i * 30,
         y: 0,
         occupied: false,
