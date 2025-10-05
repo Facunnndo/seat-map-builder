@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
   Dialog,
@@ -39,6 +41,7 @@ export const CreateSectionDialog = ({ open, onOpenChange }: CreateSectionDialogP
       color,
       rows: [],
       position: { x: 100, y: 100 },
+      rotation: 0,
     });
 
     toast.success("Sección creada");

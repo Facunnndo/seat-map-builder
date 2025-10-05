@@ -1,6 +1,10 @@
+"use client";
+
 import { Section } from "@/store/mapStore";
 import { useMapStore } from "@/store/mapStore";
 import { useState, useRef, useEffect } from "react";
+import { RotateCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { SeatGrid } from "./SeatGrid";
 
 interface SectionCardProps {
@@ -8,7 +12,7 @@ interface SectionCardProps {
 }
 
 export const SectionCard = ({ section }: SectionCardProps) => {
-  const { updateSection, selectedSectionId, setSelectedSection } = useMapStore();
+  const { updateSection, selectedSectionId, setSelectedSection, rotateSection } = useMapStore();
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
@@ -51,6 +55,11 @@ export const SectionCard = ({ section }: SectionCardProps) => {
 
   const isSelected = selectedSectionId === section.id;
 
+  const handleRotate = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    rotateSection(section.id);
+  };
+
   return (
     <div
       ref={cardRef}
@@ -61,6 +70,8 @@ export const SectionCard = ({ section }: SectionCardProps) => {
         left: section.position.x,
         top: section.position.y,
         cursor: isDragging ? "grabbing" : "grab",
+        transform: `rotate(${section.rotation}deg)`,
+        transformOrigin: "center",
       }}
       onMouseDown={handleMouseDown}
     >
@@ -72,9 +83,20 @@ export const SectionCard = ({ section }: SectionCardProps) => {
         }}
       >
         <h3 className="font-semibold text-sm">{section.label}</h3>
-        <span className="text-xs opacity-90">
-          {section.rows.reduce((acc, row) => acc + row.seats.length, 0)} asientos
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs opacity-90">
+            {section.rows.reduce((acc, row) => acc + row.seats.filter(seat => seat.occupied).length, 0)}/
+            {section.rows.reduce((acc, row) => acc + row.seats.length, 0)} asientos
+          </span>
+          <Button
+            onClick={handleRotate}
+            size="sm"
+            variant="ghost"
+            className="h-6 w-6 p-0 text-white hover:bg-white/20"
+          >
+            <RotateCw className="h-3 w-3" />
+          </Button>
+        </div>
       </div>
 
       <div className="p-4">

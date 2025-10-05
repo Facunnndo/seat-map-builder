@@ -1,6 +1,19 @@
-import { Download, Upload, FileText, Plus } from "lucide-react";
+"use client";
+
+import { Download, Upload, FileText, FilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useMapStore } from "@/store/mapStore";
 import { toast } from "sonner";
 import { useState, useRef } from "react";
@@ -45,10 +58,8 @@ export const Toolbar = () => {
   };
 
   const handleNewMap = () => {
-    if (confirm("¿Estás seguro de crear un nuevo mapa? Se perderán los cambios no guardados.")) {
-      resetMap();
-      toast.success("Nuevo mapa creado");
-    }
+    resetMap();
+    toast.success("Nuevo mapa creado - contenido borrado");
   };
 
   return (
@@ -75,10 +86,29 @@ export const Toolbar = () => {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button onClick={handleNewMap} variant="outline" size="sm">
-          <Plus className="h-4 w-4 mr-2" />
-          Nuevo
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline" size="sm">
+              <FilePlus className="h-4 w-4 mr-2" />
+              Nuevo Mapa
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>¿Crear nuevo mapa?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Se borrará todo el contenido actual del mapa y se perderán los cambios no guardados.
+                Esta acción no se puede deshacer.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={handleNewMap} className="bg-destructive hover:bg-destructive/90">
+                Crear Nuevo Mapa
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         
         <input
           ref={fileInputRef}

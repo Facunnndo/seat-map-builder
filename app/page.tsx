@@ -2,7 +2,7 @@ import { Toolbar } from "@/components/MapEditor/Toolbar";
 import { Sidebar } from "@/components/MapEditor/Sidebar";
 import { Canvas } from "@/components/MapEditor/Canvas";
 
-const Index = () => {
+export default function HomePage() {
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <Toolbar />
@@ -12,6 +12,4 @@ const Index = () => {
       </div>
     </div>
   );
-};
-
-export default Index;
+}

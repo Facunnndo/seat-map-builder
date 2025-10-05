@@ -1,3 +1,5 @@
+"use client";
+
 import { useMapStore } from "@/store/mapStore";
 import { Trash2, Edit, ChevronRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -111,7 +113,7 @@ export const SectionList = () => {
                       key={row.id}
                       className="p-2 rounded bg-sidebar-accent/50 text-xs text-sidebar-foreground"
                     >
-                      {row.label} ({row.seats.length} asientos)
+                      {row.label} ({row.seats.filter(seat => seat.occupied).length}/{row.seats.length} asientos)
                     </div>
                   ))}
                 </div>

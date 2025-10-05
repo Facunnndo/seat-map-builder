@@ -1,3 +1,5 @@
+"use client";
+
 import { useMapStore } from "@/store/mapStore";
 import { SectionCard } from "./SectionCard";
 import { useRef, useState, useEffect } from "react";

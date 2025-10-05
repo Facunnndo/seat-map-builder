@@ -20,6 +20,7 @@ export type Section = {
   color: string;
   rows: Row[];
   position: { x: number; y: number };
+  rotation: number; // in degrees: 0, 90, 180, 270
 };
 
 export type MapData = {
@@ -38,6 +39,7 @@ interface MapStore {
   addSection: (section: Section) => void;
   updateSection: (sectionId: string, updates: Partial<Section>) => void;
   deleteSection: (sectionId: string) => void;
+  rotateSection: (sectionId: string) => void;
   
   addRow: (sectionId: string, row: Row) => void;
   updateRow: (sectionId: string, rowId: string, updates: Partial<Row>) => void;
@@ -98,6 +100,16 @@ export const useMapStore = create<MapStore>((set, get) => ({
         sections: state.mapData.sections.filter((s) => s.id !== sectionId),
       },
       selectedSectionId: state.selectedSectionId === sectionId ? null : state.selectedSectionId,
+    })),
+
+  rotateSection: (sectionId) =>
+    set((state) => ({
+      mapData: {
+        ...state.mapData,
+        sections: state.mapData.sections.map((s) =>
+          s.id === sectionId ? { ...s, rotation: (s.rotation + 90) % 360 } : s
+        ),
+      },
     })),
 
   addRow: (sectionId, row) =>

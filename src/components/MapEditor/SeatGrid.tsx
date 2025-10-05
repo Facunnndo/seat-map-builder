@@ -1,3 +1,5 @@
+"use client";
+
 import { Section } from "@/store/mapStore";
 import { useMapStore } from "@/store/mapStore";
 import { Trash2 } from "lucide-react";
@@ -64,7 +66,7 @@ export const SeatGrid = ({ section }: SeatGridProps) => {
               <AlertDialogHeader>
                 <AlertDialogTitle>¿Eliminar fila?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Se eliminará la fila "{row.label}" con {row.seats.length} asientos. Esta acción no se puede deshacer.
+                  Se eliminará la fila "{row.label}" con {row.seats.filter(seat => seat.occupied).length}/{row.seats.length} asientos ocupados. Esta acción no se puede deshacer.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
