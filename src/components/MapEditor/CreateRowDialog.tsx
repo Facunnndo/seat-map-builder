@@ -22,6 +22,7 @@ interface CreateRowDialogProps {
 export const CreateRowDialog = ({ open, onOpenChange, sectionId }: CreateRowDialogProps) => {
   const { addRow } = useMapStore();
   const [rowLabel, setRowLabel] = useState("");
+  const [rowCount, setRowCount] = useState(1);
   const [seatCount, setSeatCount] = useState(10);
   const [seatPrefix, setSeatPrefix] = useState("");
 
@@ -31,27 +32,42 @@ export const CreateRowDialog = ({ open, onOpenChange, sectionId }: CreateRowDial
       return;
     }
 
+    if (rowCount < 1 || rowCount > 50) {
+      toast.error("El número de filas debe estar entre 1 y 50");
+      return;
+    }
+
     if (seatCount < 1 || seatCount > 100) {
       toast.error("El número de asientos debe estar entre 1 y 100");
       return;
     }
 
-    const seats = Array.from({ length: seatCount }, (_, i) => ({
-      id: crypto.randomUUID(),
-      label: seatPrefix ? `${seatPrefix}${i + 1}` : `${rowLabel}${i + 1}`,
-      x: i * 30,
-      y: 0,
-      occupied: false,
-    }));
+    // Crear múltiples filas
+    for (let r = 0; r < rowCount; r++) {
+      const rowLabelFinal = rowCount > 1 
+        ? `${rowLabel.trim()} ${r + 1}` 
+        : rowLabel.trim();
+      
+      const seatPrefixFinal = seatPrefix.trim() || rowLabelFinal;
 
-    addRow(sectionId, {
-      id: crypto.randomUUID(),
-      label: rowLabel.trim(),
-      seats,
-    });
+      const seats = Array.from({ length: seatCount }, (_, i) => ({
+        id: crypto.randomUUID(),
+        label: `${seatPrefixFinal}${i + 1}`,
+        x: i * 30,
+        y: 0,
+        occupied: false,
+      }));
 
-    toast.success(`Fila creada con ${seatCount} asientos`);
+      addRow(sectionId, {
+        id: crypto.randomUUID(),
+        label: rowLabelFinal,
+        seats,
+      });
+    }
+
+    toast.success(`${rowCount} fila(s) creada(s) con ${seatCount} asientos cada una`);
     setRowLabel("");
+    setRowCount(1);
     setSeatCount(10);
     setSeatPrefix("");
     onOpenChange(false);
@@ -76,10 +92,25 @@ export const CreateRowDialog = ({ open, onOpenChange, sectionId }: CreateRowDial
               value={rowLabel}
               onChange={(e) => setRowLabel(e.target.value)}
             />
+            <p className="text-xs text-muted-foreground">
+              Si creas múltiples filas, se numerarán automáticamente
+            </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="seatCount">Cantidad de asientos</Label>
+            <Label htmlFor="rowCount">Cantidad de filas</Label>
+            <Input
+              id="rowCount"
+              type="number"
+              min="1"
+              max="50"
+              value={rowCount}
+              onChange={(e) => setRowCount(parseInt(e.target.value) || 1)}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="seatCount">Cantidad de asientos por fila</Label>
             <Input
               id="seatCount"
               type="number"
