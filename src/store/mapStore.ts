@@ -20,6 +20,10 @@ export type Section = {
   color: string;
   rows: Row[];
   position: { x: number; y: number };
+  width?: number;
+  height?: number;
+  rotation?: number;
+  curve?: number;
 };
 
 export type MapData = {
